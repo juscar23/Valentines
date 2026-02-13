@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Your Eyes Only</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:radial-gradient(circle at top,#ffe4ec,#ffd6e0,#ffc2d1);
+    overflow-x:hidden;
+    color:#333;
+}
+
+/* floating hearts */
+.heart{
+ position:fixed;
+ bottom:-40px;
+ font-size:18px;
+ color:#ff6fa5;
+ animation:float 12s linear infinite;
+ opacity:.6;
+ z-index:0;
+}
+@keyframes float{
+ 0%{transform:translateY(0) scale(1);opacity:0;}
+ 10%{opacity:.8;}
+ 100%{transform:translateY(-120vh) scale(1.6);opacity:0;}
+}
+
+/* stars */
+.star{
+ position:fixed;
+ top:0;
+ width:2px;
+ height:2px;
+ background:white;
+ opacity:.7;
+}
+
+/* screens */
+.screen{
+ height:100vh;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:20px;
+}
+
+h1{color:#ff4d88;margin-bottom:10px;}
+p{color:#666;}
+
+input{
+ padding:14px;
+ border-radius:12px;
+ border:none;
+ text-align:center;
+ font-size:18px;
+ margin-top:15px;
+}
+
+button{
+ margin-top:20px;
+ padding:14px 35px;
+ border:none;
+ border-radius:30px;
+ background:#ff4d88;
+ color:white;
+ font-size:18px;
+ cursor:pointer;
+ box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+/* main */
+.main{
+ display:none;
+ padding:40px 20px 80px;
+ max-width:700px;
+ margin:auto;
+ animation:fadeIn 1.5s ease;
+}
+
+.card{
+ background:rgba(255,255,255,.96);
+ padding:35px 25px;
+ border-radius:25px;
+ text-align:center;
+ box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.photo{
+ width:100%;
+ max-width:340px;
+ border-radius:18px;
+ margin:20px auto;
+ display:block;
+ box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.message{
+ font-size:18px;
+ line-height:1.8;
+ white-space:pre-line;
+ min-height:140px;
+}
+
+.final{
+ margin-top:30px;
+ font-size:22px;
+ color:#ff4d88;
+ opacity:0;
+ animation:fadeIn 3s ease forwards;
+ animation-delay:8s;
+}
+
+@keyframes fadeIn{
+ from{opacity:0;transform:translateY(20px);}
+ to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgmusic" loop>
+ <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* hearts */
+function heart(){
+ let h=document.createElement("div");
+ h.className="heart";
+ h.innerHTML="❤";
+ h.style.left=Math.random()*100+"vw";
+ h.style.fontSize=(14+Math.random()*26)+"px";
+ h.style.animationDuration=(8+Math.random()*6)+"s";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),14000);
+}
+setInterval(heart,500);
+
+/* stars */
+for(let i=0;i<60;i++){
+ let s=document.createElement("div");
+ s.className="star";
+ s.style.left=Math.random()*100+"vw";
+ s.style.top=Math.random()*100+"vh";
+ document.body.appendChild(s);
+}
+
+/* passcode */
+const correct="0212"; // CHANGE PASSCODE HERE
+
+function unlock(){
+ let val=document.getElementById("pass").value;
+ if(val===correct){
+   document.getElementById("lock").style.display="none";
+   document.getElementById("intro").style.display="flex";
+ }else{
+   alert("wrong passcode baby 😝");
+ }
+}
+
+/* open */
+function openLetter(){
+ document.getElementById("intro").style.display="none";
+ document.querySelector(".main").style.display="block";
+ document.getElementById("bgmusic").play().catch(()=>{});
+ typeMsg();
+}
+
+/* typing */
+const text=`February 12, 2026.
+
+I planned this day early because I wanted everything to feel right for us.
+
+Somewhere new. Somewhere peaceful.
+Somewhere with a view we could share together.
+
+Seeing you happy yesterday made everything worth it.
+I was honestly relieved watching you enjoy the moment.
+
+Celebrating Valentine’s with someone I feel safe and connected with is a blessing.
+You’ve given me so much just by existing, yet you still surprise me.
+
+I loved watching you take photos of the scenery.
+Even if my face didn’t show it, I enjoyed every second with you.
+
+Thank you for yesterday.
+Thank you for being you.`;
+
+let i=0;
+function typeMsg(){
+ if(i<text.length){
+  document.getElementById("typed").innerHTML+=text.charAt(i);
+  i++;
+  setTimeout(typeMsg,35);
+ }
+}
+</script>
+
+<!-- PASSCODE -->
+<div class="screen" id="lock">
+ <h1>For Your Eyes Only ❤</h1>
+ <p>Enter our passcode</p>
+ <input id="pass" type="password" placeholder="passcode">
+ <button onclick="unlock()">Unlock</button>
+</div>
+
+<!-- INTRO -->
+<div class="screen" id="intro" style="display:none;">
+ <h1>Hey Love</h1>
+ <p>I made something for you</p>
+ <button onclick="openLetter()">Open</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+ <div class="card">
+  <h1>Happy Valentine's Day</h1>
+  <img src="photo.jpg" class="photo">
+  <div id="typed" class="message"></div>
+
+  <div class="final">
+  Last February I didn't know you existed,<br>
+  this February I couldn't imagine my life with you ❤
+  </div>
+ </div>
+</div>
+
+</body>
+</html>
